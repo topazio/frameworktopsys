@@ -74,7 +74,7 @@ public final class TSAuditoria {
 
 		return !TSUtil.isEmpty(this.pathFile) && !TSUtil.isEmpty(this.maxSeconds);
 	}
-
+ 
 	private void saveInFile(final long duracaoSegundos) {
 
 		Path path = Paths.get(this.pathFile + LocalDate.now().format(DateTimeFormatter.ofPattern(DATA)) + ".csv");

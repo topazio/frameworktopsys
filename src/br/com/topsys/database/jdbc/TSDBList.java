@@ -381,7 +381,7 @@ public final class TSDBList {
 
 			if (this.result.wasNull()) {
 				value = null;
-			}
+			} 
 
 		} catch (SQLException e) {
 			TSLogUtil.getInstance().severe(e.getMessage());

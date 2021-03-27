@@ -223,7 +223,7 @@ public abstract class TSDataBaseBrokerAb implements TSDataBaseBrokerIf {
 
 		TSAuditoria auditoria = new TSAuditoria(this.query, this.parametros);
 
-		try {
+		try { 
 
 			auditoria.begin();
 
