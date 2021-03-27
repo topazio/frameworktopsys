@@ -1,4 +1,4 @@
 # Maven
 log/
 target/
-/bin
+bin/
