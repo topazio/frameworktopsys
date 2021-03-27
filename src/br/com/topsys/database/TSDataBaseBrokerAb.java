@@ -51,7 +51,7 @@ public abstract class TSDataBaseBrokerAb implements TSDataBaseBrokerIf {
 	private String query;
 
 	protected Calendar GMT;
-	
+
 	private Object[] parametros;
 
 	private final static String MENSAGEM_METODO_INVALIDO = "Esse metódo não pode ser executado quando utilizado a classe TSDataBaseBroker, ou seja quando o projeto utiliza EJB!";
@@ -220,21 +220,20 @@ public abstract class TSDataBaseBrokerAb implements TSDataBaseBrokerIf {
 	@SuppressWarnings("unchecked")
 	public List getCollectionBean(Class bean, String... values) {
 		List array = new ArrayList();
-		
-		TSAuditoria auditoria = new TSAuditoria(this.query,this.parametros);
-		
+
+		TSAuditoria auditoria = new TSAuditoria(this.query, this.parametros);
+
 		try {
 
 			auditoria.begin();
 
 			this.resultSet = this.statement.executeQuery();
-		
+
 			if (this.resultSet.last() && this.resultSet.getRow() >= 500) {
 
 				inserirAuditoria(this.query, this.resultSet.getRow());
 			}
 
-			
 			this.resultSet.beforeFirst();
 
 			for (; this.resultSet.next();) {
@@ -244,10 +243,10 @@ public abstract class TSDataBaseBrokerAb implements TSDataBaseBrokerIf {
 		} catch (Exception e) {
 
 			throw new TSSystemException(e);
-			
+
 		} finally {
 			this.close();
-     		auditoria.end();
+			auditoria.end();
 		}
 
 		return array;
@@ -290,7 +289,12 @@ public abstract class TSDataBaseBrokerAb implements TSDataBaseBrokerIf {
 
 	public Object getObjectBean(Class bean, String... values) {
 		Object objeto = null;
+
+		TSAuditoria auditoria = new TSAuditoria(this.query, this.parametros);
+
 		try {
+
+			auditoria.begin();
 
 			this.resultSet = this.statement.executeQuery();
 
@@ -303,6 +307,7 @@ public abstract class TSDataBaseBrokerAb implements TSDataBaseBrokerIf {
 			throw new TSSystemException(e);
 		} finally {
 			this.close();
+			auditoria.end();
 		}
 
 		return objeto;
@@ -311,8 +316,13 @@ public abstract class TSDataBaseBrokerAb implements TSDataBaseBrokerIf {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List getList() {
 		List objeto = new ArrayList();
+		
+		TSAuditoria auditoria = new TSAuditoria(this.query, this.parametros);
+
 		try {
 
+			auditoria.begin();
+			
 			this.resultSet = this.statement.executeQuery();
 
 			while (this.resultSet.next()) {
@@ -322,8 +332,10 @@ public abstract class TSDataBaseBrokerAb implements TSDataBaseBrokerIf {
 		} catch (Exception e) {
 
 			throw new TSSystemException(e);
+			
 		} finally {
 			this.close();
+			auditoria.end();
 		}
 
 		return objeto;
@@ -331,7 +343,12 @@ public abstract class TSDataBaseBrokerAb implements TSDataBaseBrokerIf {
 
 	public Object getObject() {
 		Object objeto = null;
+
+		TSAuditoria auditoria = new TSAuditoria(this.query, this.parametros);
+
 		try {
+
+			auditoria.begin();
 
 			this.resultSet = this.statement.executeQuery();
 
@@ -344,6 +361,7 @@ public abstract class TSDataBaseBrokerAb implements TSDataBaseBrokerIf {
 			throw new TSSystemException(e);
 		} finally {
 			this.close();
+			auditoria.end();
 		}
 
 		return objeto;
@@ -458,6 +476,7 @@ public abstract class TSDataBaseBrokerAb implements TSDataBaseBrokerIf {
 			}
 
 		} catch (Exception e) {
+			
 			throw new TSSystemException(e);
 		}
 		return objBean;
@@ -473,7 +492,7 @@ public abstract class TSDataBaseBrokerAb implements TSDataBaseBrokerIf {
 	public void set(Object... values) {
 
 		if (values == null) {
-
+            this.close();
 			throw new IllegalArgumentException();
 
 		}
@@ -483,6 +502,7 @@ public abstract class TSDataBaseBrokerAb implements TSDataBaseBrokerIf {
 			this.set(values[x]);
 
 		}
+		this.parametros = values;
 
 	}
 
@@ -586,9 +606,7 @@ public abstract class TSDataBaseBrokerAb implements TSDataBaseBrokerIf {
 	}
 
 	public void setSQL(String query, Object... objects) {
-		
-		this.parametros = objects;
-		
+
 		try {
 			this.query = query;
 			statement = this.getConnection().prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE,

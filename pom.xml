@@ -68,6 +68,7 @@
 
 
 	<build>
+	<finalName>frameworktopsys</finalName>
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
 			<resource>
