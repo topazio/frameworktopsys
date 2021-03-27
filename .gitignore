@@ -1,4 +1,4 @@
 # Maven
-log/
-target/
-bin/
+/log/*
+/target/*
+/bin/*
